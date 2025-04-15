@@ -1,0 +1,35 @@
+#files
+*.midi
+*.wav
+*.WAV
+*.out
+*.o
+*.s
+*.cdl
+*.out
+*.json
+*~
+*.swp
+*.swo
+*.swn
+
+*/example
+
+.vscode/
+.venv/
+.idea/
+cmake-build-debug/
+
+
+gitignore/
+
+
+#cmake
+*cmake-build-dir*
+# cmakelists.txt
+
+#JUCE
+# JUCE/
+
+build/
+
