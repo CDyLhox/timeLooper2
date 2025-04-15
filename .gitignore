@@ -26,7 +26,6 @@ gitignore/
 
 #cmake
 *cmake-build-dir*
-# cmakelists.txt
 
 #JUCE
 # JUCE/
