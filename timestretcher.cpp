@@ -75,10 +75,10 @@ void Timestretcher::prepare(const float& input)
 				}
 }
 
-void Timestretcher::setAmountZeroCrossings(int amountOfZeroCrossings)
+void Timestretcher::setMaxNumZeroCrossings(std::atomic<int> amountOfZeroCrossings)
 { // TODO: safety checks: check if the number is devisable by 2 else correct the number upwards (dc offset)
 				std::cout << "Timestretcher::setAmountZeroCrossings be like\n";
-				if (amountOfZeroCrossings > 12 || amountOfZeroCrossings < 256) {
+				if (amountOfZeroCrossings > 12 || amountOfZeroCrossings < 512) {
 								m_maxNumZeroCrossings = amountOfZeroCrossings;
 				} else {
 								std::cout << "value is out of range. please select a number between 256" << std::endl;

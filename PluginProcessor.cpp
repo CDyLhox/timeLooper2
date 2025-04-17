@@ -6,11 +6,20 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 		: AudioProcessor(BusesProperties()
 							.withInput("Input", juce::AudioChannelSet::stereo(), true)
 							.withOutput("Output", juce::AudioChannelSet::stereo(), true))
+		, Params(*this, nullptr, "Parameters", {
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 20.0, 20000.0, 500.0),
+																							 //std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uResonance", 1 }, "Resonance", 0.0, 1.0, 0.1),
+																					 })
 {
+				// Use the parameter ID to return a pointer to our parameter data
+				MaxNumZeroCrossings = Params.getRawParameterValue("uMaxNumZeroCrossings");
+				//resonance = Params.getRawParameterValue("uResonance");
+				
+
 				// for each input channel emplace one filter
 				for (auto i = 0; i < getBusesLayout().getNumChannels(true, 0); ++i) {
-								// timestretchers.emplace_back();
-								//  Giving the filter some hardcoded start up params
+								timestretchers.emplace_back();
+								// Giving the filter some hardcoded start up params
 				}
 }
 // w
@@ -124,6 +133,11 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout& layout
 void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 		juce::MidiBuffer& midiMessages)
 {
+
+	for (auto& stretcher : timestretchers)
+	{
+		stretcher.setMaxNumZeroCrossings(MaxNumZeroCrossings); // You define this method
+	}
 				juce::ignoreUnused(midiMessages);
 
 				juce::ScopedNoDenormals noDenormals;

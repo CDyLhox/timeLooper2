@@ -15,7 +15,9 @@ cmake_minimum_required(VERSION 3.22)
 # directories, and the current project version. This is a standard CMake command.
 
 project(CdlStretchLooper VERSION 0.0.1)
-add_subdirectory(JUCE) # if juce is in the root folder
+#TODO: if line 19 is commented out, uncomment
+# add_subdirectory(JUCE) # if juce is in the root folder
+
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
 # included JUCE directly in your source tree (perhaps as a submodule), you'll need to tell CMake to
@@ -109,6 +111,7 @@ target_link_libraries(CdlStretchLooper
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
+	juce::juce_audio_processors
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
