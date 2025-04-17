@@ -47,7 +47,7 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor {
 		private:
 				//==============================================================================
 				JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
-				std::atomic<int>* MaxNumZeroCrossings;
+				std::atomic<float> *MaxNumZeroCrossings = nullptr;
 				std::atomic<float>* threshold;
 
 				std::vector<Timestretcher> timestretchers;

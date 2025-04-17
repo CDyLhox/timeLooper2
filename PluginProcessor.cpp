@@ -7,7 +7,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 							.withInput("Input", juce::AudioChannelSet::stereo(), true)
 							.withOutput("Output", juce::AudioChannelSet::stereo(), true))
 		, Params(*this, nullptr, "Parameters", {
-																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 20.0, 20000.0, 500.0),
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 1.0, 512.0, 1),
 																							 //std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uResonance", 1 }, "Resonance", 0.0, 1.0, 0.1),
 																					 })
 {
@@ -136,8 +136,7 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
 	for (auto& stretcher : timestretchers)
 	{
-		stretcher.setMaxNumZeroCrossings(MaxNumZeroCrossings); // You define this method
-	}
+		stretcher.setMaxNumZeroCrossings(static_cast<int>(*MaxNumZeroCrossings));	}
 				juce::ignoreUnused(midiMessages);
 
 				juce::ScopedNoDenormals noDenormals;

@@ -16,7 +16,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				addAndMakeVisible(numCrossingsDial);
 				numCrossingsDial.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
-				numCrossingsDial.setRange(0, 1, 0.1);
+				numCrossingsDial.setRange(0, 512, 1);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colour::fromRGBA(255, 255, 255, 200));
 				numCrossingsDial.setDoubleClickReturnValue(true, 0.3);
 				//--------BUTTON STUFF--------
@@ -52,7 +52,7 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 
 				g.setColour(juce::Colours::black);
 				g.setFont(15.0f);
-				g.drawFittedText("jue!", getLocalBounds(), juce::Justification::centredTop, 1);
+				g.drawFittedText("jue! timestretchlooper", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
@@ -61,11 +61,11 @@ void AudioPluginAudioProcessorEditor::resized()
 				auto topMargin = getHeight() * 0.02;
 				auto dialSize = getWidth() * 0.25;
 
-				fader.setBounds(leftMargin, topMargin, dialSize, dialSize);
+				numCrossingsDial.setBounds(leftMargin, topMargin, dialSize, dialSize);
 
 				auto buttonWidth = getWidth() * 0.1;
 				auto buttonHeight = getHeight() * 0.05;
-				freezeButton.setBounds(fader.getX() + fader.getWidth(), topMargin, buttonWidth, buttonHeight);
+				freezeButton.setBounds(numCrossingsDial.getX() + numCrossingsDial.getWidth(), topMargin, buttonWidth, buttonHeight);
 				// This is generally where you'll want to lay out the positions of any
 				// subcomponents in your editor..
 }
