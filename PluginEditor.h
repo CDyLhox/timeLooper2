@@ -20,7 +20,10 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor 
 				juce::Slider thresholdSlider;
 				juce::TextButton freezeButton;
 
+				using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+
 				std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> numCrossingsAttachment;
+				std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttachment;
 
 
 				JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)

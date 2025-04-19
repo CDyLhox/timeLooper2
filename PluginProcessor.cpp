@@ -137,7 +137,8 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
 	for (auto& stretcher : timestretchers)
 	{
-		stretcher.setMaxNumZeroCrossings(static_cast<int>(*MaxNumZeroCrossings));	}
+		stretcher.setMaxNumZeroCrossings(static_cast<int>(*MaxNumZeroCrossings)); stretcher.setThreshold(static_cast<float>(*threshold));	}	
+	
 				juce::ignoreUnused(midiMessages);
 
 				juce::ScopedNoDenormals noDenormals;

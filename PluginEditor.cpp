@@ -22,7 +22,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				// _______ threshold FADER STUFF _________
 				addAndMakeVisible(thresholdSlider);
 				thresholdSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
-				thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
+				thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 32, 32);
 				thresholdSlider.setRange(0, 1, 0.05);
 				// thresholdSlider.setColour(juce::Slider::ColourIds::)
 				thresholdSlider.setDoubleClickReturnValue(true, 0.3);
@@ -32,10 +32,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				freezeButton.setButtonText("activateLoopButton");
 				freezeButton.setClickingTogglesState(true);
 
-				numCrossingsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-						processorRef.Params,
-						"uCutoff",
-						numCrossingsDial);
 
 				// buttonColours
 				freezeButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::lightgoldenrodyellow);
@@ -46,6 +42,16 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				setResizable(true, true);
 
 				getConstrainer()->setFixedAspectRatio(2.0);
+
+
+				numCrossingsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+						processorRef.Params,
+						"umaxNumZeroCrossings",
+						numCrossingsDial);
+
+				thresholdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+				processorRef.Params, "uThreshold", thresholdSlider);
+
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -60,7 +66,7 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 
 				g.setColour(juce::Colours::black);
 				g.setFont(15.0f);
-				g.drawFittedText("jue! timestretchlooper {version testvisual}", getLocalBounds(), juce::Justification::centredTop, 1);
+				g.drawFittedText("jue! timestretchlooper {version testvisual 0.6.1}", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
