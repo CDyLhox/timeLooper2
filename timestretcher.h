@@ -14,6 +14,7 @@ class Timestretcher : public Effect {
 
 				// set the amount of time the inputSig has to cross the 0 before the circbuffer repeats
 				void setMaxNumZeroCrossings(std::atomic<int> timeStretchLength);
+				void setThreshold(std::atomic<float> threshold);
 
 				// use the numZeroCrossings to fill buffer
 				void prepare(const float& input);

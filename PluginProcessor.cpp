@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <memory>
 
 //==============================================================================
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
@@ -7,13 +8,13 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 							.withInput("Input", juce::AudioChannelSet::stereo(), true)
 							.withOutput("Output", juce::AudioChannelSet::stereo(), true))
 		, Params(*this, nullptr, "Parameters", {
-																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 1.0, 512.0, 1),
-																							 //std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uResonance", 1 }, "Resonance", 0.0, 1.0, 0.1),
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 2.0, 512.0, 256),
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uThreshold", 1 }, "Threshold", 0.0, 1.0, 3.0),
 																					 })
 {
 				// Use the parameter ID to return a pointer to our parameter data
 				MaxNumZeroCrossings = Params.getRawParameterValue("uMaxNumZeroCrossings");
-				//resonance = Params.getRawParameterValue("uResonance");
+				threshold = Params.getRawParameterValue("uThreshold");
 				
 
 				// for each input channel emplace one filter
@@ -173,14 +174,23 @@ void AudioPluginAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 				// You should use this method to store your parameters in the memory block.
 				// You could do that either as raw data, or use the XML or ValueTree classes
 				// as intermediaries to make it easy to save and load complex data.
-				juce::ignoreUnused(destData);
+				//juce::ignoreUnused(destData);
+				auto state=Params.copyState();
+				std::unique_ptr<juce::XmlElement> xml (state.createXml());	
+				copyXmlToBinary(*xml, destData);
 }
 
 void AudioPluginAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
 				// You should use this method to restore your parameters from this memory block,
 				// whose contents will have been created by the getStateInformation() call.
-				juce::ignoreUnused(data, sizeInBytes);
+				//juce::ignoreUnused(data, sizeInBytes);
+				std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data,sizeInBytes));
+				if(xmlState.get() != nullptr){
+								if(xmlState->hasTagName(Params.state.getType())){
+												Params.replaceState(juce::ValueTree::fromXml(*xmlState));
+								}
+				}
 }
 
 //==============================================================================

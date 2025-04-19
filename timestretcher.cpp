@@ -78,10 +78,19 @@ void Timestretcher::prepare(const float& input)
 void Timestretcher::setMaxNumZeroCrossings(std::atomic<int> amountOfZeroCrossings)
 { // TODO: safety checks: check if the number is devisable by 2 else correct the number upwards (dc offset)
 				std::cout << "Timestretcher::setAmountZeroCrossings be like\n";
-				if (amountOfZeroCrossings > 12 || amountOfZeroCrossings < 512) {
+				if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 512) {
 								m_maxNumZeroCrossings = amountOfZeroCrossings;
 				} else {
 								std::cout << "value is out of range. please select a number between 256" << std::endl;
+				}
+}
+void Timestretcher::setThreshold(std::atomic<float> threshold)
+{
+				std::cout << "Timestretcher::setThreshold be like\n";
+				if (threshold > 12 || threshold < 0.01) {
+								m_threshold = threshold;
+				} else {
+								std::cout << "value is out of range. please select a number between 0.01 and 12" << std::endl;
 				}
 }
 

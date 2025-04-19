@@ -12,13 +12,21 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				// editor's size to whatever you need it to be.
 				setSize(1000, 500);
 
-				//________ FADER STUFF ________
+				//________ NUMCROSSING FADER STUFF ________
 				addAndMakeVisible(numCrossingsDial);
 				numCrossingsDial.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
 				numCrossingsDial.setRange(0, 512, 1);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colour::fromRGBA(255, 255, 255, 200));
-				numCrossingsDial.setDoubleClickReturnValue(true, 0.3);
+				numCrossingsDial.setDoubleClickReturnValue(true, 256);
+				// _______ threshold FADER STUFF _________
+				addAndMakeVisible(thresholdSlider);
+				thresholdSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+				thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
+				thresholdSlider.setRange(0, 1, 0.05);
+				// thresholdSlider.setColour(juce::Slider::ColourIds::)
+				thresholdSlider.setDoubleClickReturnValue(true, 0.3);
+
 				//--------BUTTON STUFF--------
 				addAndMakeVisible(freezeButton);
 				freezeButton.setButtonText("activateLoopButton");
@@ -52,7 +60,7 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 
 				g.setColour(juce::Colours::black);
 				g.setFont(15.0f);
-				g.drawFittedText("jue! timestretchlooper", getLocalBounds(), juce::Justification::centredTop, 1);
+				g.drawFittedText("jue! timestretchlooper {version testvisual}", getLocalBounds(), juce::Justification::centredTop, 1);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
@@ -63,10 +71,12 @@ void AudioPluginAudioProcessorEditor::resized()
 
 				numCrossingsDial.setBounds(leftMargin, topMargin, dialSize, dialSize);
 
-				auto buttonWidth = getWidth() * 0.1;
+				thresholdSlider.setBounds(leftMargin, topMargin + dialSize, dialSize * 2, dialSize);
+
+						auto buttonWidth
+						= getWidth() * 0.1;
 				auto buttonHeight = getHeight() * 0.05;
 				freezeButton.setBounds(numCrossingsDial.getX() + numCrossingsDial.getWidth(), topMargin, buttonWidth, buttonHeight);
 				// This is generally where you'll want to lay out the positions of any
 				// subcomponents in your editor..
 }
-
