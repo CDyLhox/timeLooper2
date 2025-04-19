@@ -20,7 +20,8 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor 
 				juce::Slider thresholdSlider;
 				juce::TextButton freezeButton;
 
-				using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+				juce::Label rmsLabel;  // Label to display the RMS value
+				juce::Label zeroCrossingsLabel;
 
 				std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> numCrossingsAttachment;
 				std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttachment;

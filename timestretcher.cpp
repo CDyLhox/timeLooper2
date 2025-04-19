@@ -3,7 +3,7 @@
 Timestretcher::Timestretcher()
 {
 				std::cout << "Timestretcher::timestretcher" << std::endl;
-				circBuffer(10000, 500); // 2000 samples buffersize, 500 numsamplesdelay
+				circBuffer(bufferSize, 500); // 2000 samples buffersize, 500 numsamplesdelay
 }
 Timestretcher::~Timestretcher()
 {
@@ -120,11 +120,20 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 				}
 }
 
-float Timestretcher::getRmsSignal(float rmsSignal)
+float Timestretcher::getRmsSignal()
 {
-				m_rmsSignal = rmsSignal;
+				//m_rmsSignal = rmsSignal;
 				return m_rmsSignal;
 }
+
+int Timestretcher::getNumZeroCrossings(currentSample){
+				zeroCrossingsValues[0] = m_NumZeroCrossings;
+				zeroCrossingsValues[1] = m_maxNumZeroCrossings;
+
+				return zeroCrossingsValues[currentSample];
+
+}
+
 
 // ______________________ CIRCBUFFER _______________________
 

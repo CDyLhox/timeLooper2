@@ -20,11 +20,14 @@ class Timestretcher : public Effect {
 				void prepare(const float& input);
 				void trackBufferSize(const float& input, int& m_zeroCrossingTimer);
 				void fillBuffer(const float& input);
-				float getRmsSignal(float rmsSignal);
+				float getRmsSignal();
+				int getNumZeroCrossings(currentSample);
+
 
 		protected:
 		private:
-				Rms rms { 3000 };
+				std::vector<int> zeroCrossingsValues;
+				Rms rms { 41500 };
 
 				// Delay circbuffer; // implement parts directly into the timestretcher from circular buffer
 				
@@ -56,7 +59,7 @@ class Timestretcher : public Effect {
 
 
 
-				uint bufferSize = 200;
+				uint bufferSize = 41000;
 				float currentSample;
 				int numSamplesDelay;
 

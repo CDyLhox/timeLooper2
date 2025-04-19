@@ -42,6 +42,8 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor {
 				void getStateInformation(juce::MemoryBlock& destData) override;
 				void setStateInformation(const void* data, int sizeInBytes) override;
 
+				std::vector<float> rmsValues;  // Store RMS values for each channel
+				std::vector<int> numZeroCrossingsInfo;
 				juce::AudioProcessorValueTreeState Params;
 
 		private:
@@ -49,6 +51,7 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor {
 				JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 				std::atomic<float> *MaxNumZeroCrossings = nullptr;
 				std::atomic<float>* threshold = nullptr;
+
 
 
 				std::vector<Timestretcher> timestretchers;

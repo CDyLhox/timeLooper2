@@ -16,6 +16,8 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 				MaxNumZeroCrossings = Params.getRawParameterValue("uMaxNumZeroCrossings");
 				threshold = Params.getRawParameterValue("uThreshold");
 				
+				std::vector<float> rmsValues;  // Store RMS values for each channel
+
 
 				// for each input channel emplace one filter
 				for (auto i = 0; i < getBusesLayout().getNumChannels(true, 0); ++i) {
@@ -97,6 +99,8 @@ void AudioPluginAudioProcessor::changeProgramName(int index, const juce::String&
 void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 				timestretchers.resize(getTotalNumInputChannels());
+				rmsValues.resize(getTotalNumInputChannels(), 0.0f);  // Resize to match the number of input channels
+
 				for (auto& ts : timestretchers)
 								ts.prepare(sampleRate); // or whatever your Timestretcher init looks like
 }
@@ -154,6 +158,8 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 								auto* readPointer = buffer.getReadPointer(channel);		// output
 								for (auto sample = 0; sample < buffer.getNumSamples(); ++sample) {
 											timestretchers[channel].processFrame(readPointer[sample],writePointer[sample]);
+								 rmsValues[channel] = timestretchers[channel].getRmsSignal();
+								 numZeroCrossingsInfo[channel] = timestretchers[channel].getNumZeroCrossings(sample);
 								}
 				}
 }
