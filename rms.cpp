@@ -1,4 +1,6 @@
 #include "rms.h"
+#include <cmath>
+#include <iostream>
 
 Rms::Rms(int bufferSize)
 {
@@ -16,7 +18,7 @@ float Rms::trackSignal(float incomingSignal)
 				bufferPosition++;
 
 				bufferSum += incomingSignal * incomingSignal;
-				RMSSignal = sqrt(bufferSum / bufferPosition);
+				RMSSignal = std::sqrt(bufferSum / static_cast<float>(bufferPosition));
 
 				if(bufferPosition > bufferSize){resetRmsSize();}
 				return RMSSignal;
