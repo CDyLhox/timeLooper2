@@ -126,7 +126,7 @@ float Timestretcher::getRmsSignal()
 				return m_rmsSignal;
 }
 
-int Timestretcher::getNumZeroCrossings(currentSample){
+int Timestretcher::getNumZeroCrossings(float currentSample){
 				zeroCrossingsValues[0] = m_NumZeroCrossings;
 				zeroCrossingsValues[1] = m_maxNumZeroCrossings;
 

@@ -21,7 +21,7 @@ class Timestretcher : public Effect {
 				void trackBufferSize(const float& input, int& m_zeroCrossingTimer);
 				void fillBuffer(const float& input);
 				float getRmsSignal();
-				int getNumZeroCrossings(currentSample);
+				int getNumZeroCrossings(float currentSample);
 
 
 		protected:
