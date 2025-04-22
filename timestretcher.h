@@ -2,7 +2,6 @@
 
 #include "effect.h"
 #include "rms.h"
-#include <iostream>
 
 class Timestretcher : public Effect {
 		public:
@@ -42,7 +41,7 @@ class Timestretcher : public Effect {
 				float m_rmsSignal = 0;
 
 				// ------- CIRCBUFFER STUFF ------
-				void circBuffer(int bufferSize, int numSamplesDelay);
+				void circBuffer(int bufferSize);
 				float readHead();
 				void writeHead(float currentSample);
 

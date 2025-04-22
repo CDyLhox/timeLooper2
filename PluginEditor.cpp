@@ -14,16 +14,19 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 				//________ NUMCROSSING FADER STUFF ________
 				addAndMakeVisible(numCrossingsDial);
-				numCrossingsDial.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+				numCrossingsDial.setSliderStyle(
+												juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag
+												);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
-				numCrossingsDial.setRange(0, 512, 1);
-				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colour::fromRGBA(255, 255, 255, 200));
+				numCrossingsDial.setRange(0, 512, 256);
+				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId,
+												juce::Colour::fromRGBA(255, 255, 255, 200));
 				numCrossingsDial.setDoubleClickReturnValue(true, 256);
 				// _______ threshold FADER STUFF _________
 				addAndMakeVisible(thresholdSlider);
 				thresholdSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
 				thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 32, 32);
-				thresholdSlider.setRange(0, 1, 0.05);
+				thresholdSlider.setRange(0, 1, 0.3);
 				// thresholdSlider.setColour(juce::Slider::ColourIds::)
 				thresholdSlider.setDoubleClickReturnValue(true, 0.3);
 
@@ -33,10 +36,14 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				freezeButton.setClickingTogglesState(true);
 
 				// buttonColours
-				freezeButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::lightgoldenrodyellow);
-				freezeButton.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::crimson);
-				freezeButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::blueviolet);
-				freezeButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+				freezeButton.setColour(juce::TextButton::ColourIds::buttonOnColourId,
+												juce::Colours::lightgoldenrodyellow);
+				freezeButton.setColour(juce::TextButton::ColourIds::buttonColourId,
+												juce::Colours::crimson);
+				freezeButton.setColour(juce::TextButton::ColourIds::textColourOnId,
+												juce::Colours::blueviolet);
+				freezeButton.setColour(juce::TextButton::ColourIds::textColourOffId,
+												juce::Colours::black);
 
 				// __________RMS LABEL ____________
 
@@ -47,10 +54,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 
 				//________ZERO CROSSING SLABEL
-				addAndMakeVisible(zeroCrossingsLabel);
+				/*addAndMakeVisible(zeroCrossingsLabel);
 				zeroCrossingsLabel.setText("0 out of 256 crossings.", juce::dontSendNotification);
 				zeroCrossingsLabel.setFont(juce::Font(20.0f));
-				zeroCrossingsLabel.setJustificationType(juce::Justification::centred);
+				zeroCrossingsLabel.setJustificationType(juce::Justification::centred);*/
 
 				// _________ PLUGIN LOGIC _______
 
@@ -79,7 +86,7 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 
 				g.setColour(juce::Colours::black);
 				g.setFont(15.0f);
-				g.drawFittedText("jue! timestretchlooper {version testvisual 0.6.1}", getLocalBounds(), juce::Justification::centredTop, 1);
+				g.drawFittedText("jue! timestretchlooper {version testvisual 0.6.2}", getLocalBounds(), juce::Justification::centredTop, 1);
 
 				//______ LABEL OF RMS ______
 				float currentRMS = processorRef.rmsValues[0]; // Or iterate over all channels
@@ -91,13 +98,13 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 				g.drawText(rmsLabel.getText(), 10, 10, getWidth() - 20, 30, juce::Justification::centred);
 
 				//________ LABEL OF ZEROCRSOSING ________
-				int currentMin = processorRef.numZeroCrossingsInfo[0];
+				/*int currentMin = processorRef.numZeroCrossingsInfo[0];
 				int currentMax = processorRef.numZeroCrossingsInfo[1];
-				rmsLabel.setText(juce::String(currentMin) + juce::String("out of") + juce::String(currentMax) + juce::String("zeroCrossings"), juce::dontSendNotification);
+				zeroCrossingsLabel.setText(juce::String(currentMin) + juce::String("out of") + juce::String(currentMax) + juce::String("zeroCrossings"), juce::dontSendNotification);
 
 				// Draw the label
 				g.setColour(juce::Colours::white);
-				g.drawText(rmsLabel.getText(), 30, 10, getWidth() - 20, 30, juce::Justification::centred);
+				g.drawText(zeroCrossingsLabel.getText(), 30, 10, getWidth() - 20, 30, juce::Justification::centred);*/
 
 }
 

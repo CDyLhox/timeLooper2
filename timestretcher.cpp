@@ -3,20 +3,20 @@
 Timestretcher::Timestretcher()
 {
 				std::cout << "Timestretcher::timestretcher" << std::endl;
-				circBuffer(bufferSize, 500); // 2000 samples buffersize, 500 numsamplesdelay
+				circBuffer(static_cast<uint>(bufferSize)); // 2000 samples buffersize, 500 numsamplesdelay
 }
 Timestretcher::~Timestretcher()
 {
 				std::cout << "Timestretcher::~timestretcher" << std::endl;
 				std::cout << "CircBuffer::~circBuffer \n"
 									<< "Elements of the Buffer were: ";
-				for (int i = 0; i < 512; i++) {
+				for (int i = 0; i < bufferSize; i++) {
 								std::cout << "\033[32m" << buffer[i] << "\033[0m" << " ";
 				}
 				std::cout << buffer << std::endl;
 
 				std::cout << "Elements of the loopBuffer were: ";
-				for (int i = 0; i < 512; i++) {
+				for (int i = 0; i < bufferSize; i++) {
 								std::cout << "\033[34m" << m_loopBuffer[i] << "\033[0m" << " ";
 				}
 				std::cout << buffer << std::endl;
@@ -105,7 +105,7 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 				if ((prevSample >= 0) != (sample >= 0)) {
 								m_NumZeroCrossings++;
 				}
-				// check when the zerocrossings has reached its max. update the delaytime 
+				// check when the zerocrossings has reached its max. update the delaytime
 				if (m_NumZeroCrossings == m_maxNumZeroCrossings && !effectTriggered) {
 								std::cout << "crossed 0 : " << m_NumZeroCrossings << "amount of times" << std::endl;
 								std::cout << m_zeroCrossingTimer << " time between zerocrossings" << std::endl;
@@ -122,26 +122,24 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 
 float Timestretcher::getRmsSignal()
 {
-				//m_rmsSignal = rmsSignal;
+				// m_rmsSignal = rmsSignal;
 				return m_rmsSignal;
 }
 
-int Timestretcher::getNumZeroCrossings(float currentSample){
+int Timestretcher::getNumZeroCrossings(float currentSample)
+{
 				zeroCrossingsValues[0] = m_NumZeroCrossings;
 				zeroCrossingsValues[1] = m_maxNumZeroCrossings;
 
 				return zeroCrossingsValues[currentSample];
-
 }
-
 
 // ______________________ CIRCBUFFER _______________________
 
-void Timestretcher::circBuffer(int size, int numSamplesDelay)
+void Timestretcher::circBuffer(int size)
 {
 				// Dynamic array
-				std::cout << "numSamplesDelay: " << numSamplesDelay << std::endl;
-				bufferSize = size;
+				bufferSize = static_cast<uint>(size);
 				writeHeadPosition = numSamplesDelay;
 				allocateBuffer(size);
 }
@@ -149,7 +147,7 @@ void Timestretcher::circBuffer(int size, int numSamplesDelay)
 void Timestretcher::allocateBuffer(int size)
 {
 
-				buffer = new float[size];
+				buffer = new float[static_cast<uint>(size)];
 				for (int i = 0; i < size; i++) {
 								buffer[i] = 0;
 				}
@@ -157,7 +155,7 @@ void Timestretcher::allocateBuffer(int size)
 				std::cout << "allocateLoopBuffer" << std::endl;
 
 				// the size of the buffers are the same but the loopbuffer doesn't need to write constantly
-				m_loopBuffer = new float[size];
+				m_loopBuffer = new float[static_cast<uint>(size)];
 				for (int i = 0; i < size; i++) {
 								m_loopBuffer[i] = 0;
 				}

@@ -9,14 +9,13 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 							.withOutput("Output", juce::AudioChannelSet::stereo(), true))
 		, Params(*this, nullptr, "Parameters", {
 																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 2.0, 512.0, 256),
-																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uThreshold", 1 }, "Threshold", 0.0, 1.0, 3.0),
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uThreshold", 1 }, "Threshold", 0.0, 1.0, 0.3),
 																					 })
 {
 				// Use the parameter ID to return a pointer to our parameter data
 				MaxNumZeroCrossings = Params.getRawParameterValue("uMaxNumZeroCrossings");
 				threshold = Params.getRawParameterValue("uThreshold");
 				
-				std::vector<float> rmsValues;  // Store RMS values for each channel
 
 
 				// for each input channel emplace one filter
@@ -153,13 +152,14 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 								buffer.clear(i, 0, buffer.getNumSamples());
 
 				// the equivalent of your old audio callback :- )
-				for (int channel = 0; channel < totalNumInputChannels; ++channel) {
+				for (int channel = 0; channel < totalNumInputChannels; ++channel) {// Note: writePointer and readPointer point to the same data (in-place processing)
 								auto* writePointer = buffer.getWritePointer(channel); // input
 								auto* readPointer = buffer.getReadPointer(channel);		// output
 								for (auto sample = 0; sample < buffer.getNumSamples(); ++sample) {
 											timestretchers[channel].processFrame(readPointer[sample],writePointer[sample]);
 								 rmsValues[channel] = timestretchers[channel].getRmsSignal();
-								 numZeroCrossingsInfo[channel] = timestretchers[channel].getNumZeroCrossings(sample);
+								// numZeroCrossingsInfo[channel] = timestretchers[channel].getNumZeroCrossings(channel);
+
 								}
 				}
 }
