@@ -18,7 +18,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 												juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag
 												);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
-				numCrossingsDial.setRange(0, 512, 256);
+				numCrossingsDial.setRange(0, 512, 1);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId,
 												juce::Colour::fromRGBA(255, 255, 255, 200));
 				numCrossingsDial.setDoubleClickReturnValue(true, 256);
@@ -54,10 +54,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 
 				//________ZERO CROSSING SLABEL
-				/*addAndMakeVisible(zeroCrossingsLabel);
+				addAndMakeVisible(zeroCrossingsLabel);
 				zeroCrossingsLabel.setText("0 out of 256 crossings.", juce::dontSendNotification);
 				zeroCrossingsLabel.setFont(juce::Font(20.0f));
-				zeroCrossingsLabel.setJustificationType(juce::Justification::centred);*/
+				zeroCrossingsLabel.setJustificationType(juce::Justification::centred);
 
 				// _________ PLUGIN LOGIC _______
 

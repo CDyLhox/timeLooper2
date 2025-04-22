@@ -101,7 +101,7 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 				rmsValues.resize(getTotalNumInputChannels(), 0.0f);  // Resize to match the number of input channels
 
 				for (auto& ts : timestretchers)
-								ts.prepare(sampleRate); // or whatever your Timestretcher init looks like
+								ts.prepare(); // or whatever your Timestretcher init looks like
 }
 
 void AudioPluginAudioProcessor::releaseResources()

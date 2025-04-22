@@ -10,13 +10,13 @@ Timestretcher::~Timestretcher()
 				std::cout << "Timestretcher::~timestretcher" << std::endl;
 				std::cout << "CircBuffer::~circBuffer \n"
 									<< "Elements of the Buffer were: ";
-				for (int i = 0; i < bufferSize; i++) {
+				for (int i = 0; i < static_cast<int>(bufferSize); i++) {
 								std::cout << "\033[32m" << buffer[i] << "\033[0m" << " ";
 				}
 				std::cout << buffer << std::endl;
 
 				std::cout << "Elements of the loopBuffer were: ";
-				for (int i = 0; i < bufferSize; i++) {
+				for (int i = 0; i < static_cast<int>(bufferSize); i++) {
 								std::cout << "\033[34m" << m_loopBuffer[i] << "\033[0m" << " ";
 				}
 				std::cout << buffer << std::endl;
@@ -41,24 +41,30 @@ void Timestretcher::applyEffect(const float& input, float& output)
 				output = readLoopHead();
 				incrementLoopReadHead();
 
-				prepare(input);
+				prepare();
 }
-void Timestretcher::prepare(const float& input)
+void Timestretcher::prepare()
 {
 				if (m_rmsSignal > m_threshold && effectTriggered == false) { // FIXME 0.3 is sensitivity of the effect
 								effectTriggered = true;
 
 								m_writeLoopHeadPosition = 0;
 
-								if (writeHeadPosition - m_loopSize < 0) {
-												readHeadPosition = writeHeadPosition - m_loopSize + bufferSize;
-								} else {
-												readHeadPosition = writeHeadPosition - m_loopSize;
+								// wrap the readheadposition based on the writeheadposition minus the loopsize + the buffersize
+								if (static_cast<uint>(writeHeadPosition) - m_loopSize < 0) {
+												readHeadPosition = 
+																static_cast<int>(writeHeadPosition) 
+																- static_cast<int>(m_loopSize) 
+																+ static_cast<int>(bufferSize);
+								} else {  
+												readHeadPosition = 
+																static_cast<int>(writeHeadPosition)-
+																static_cast<int>(m_loopSize);
 								}
 								wrapHeads(readHeadPosition);
 
 								// Note: copy the loop from the big buffer to the loopBuffer
-								for (int i = 0; i < bufferSize; i++) {
+								for (int i = 0; i < static_cast<int>(bufferSize); i++) {
 												writeLoopHead(readHead());
 												incrementLoopWriteHead();
 
@@ -114,7 +120,7 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 
 								// Update ReadheadPosition based on how long the zerocrossingstimer says the amount of zerocrossings took
 								writeHeadPosition = m_zeroCrossingTimer;
-								m_loopSize = m_zeroCrossingTimer;
+								m_loopSize = static_cast<uint>(m_zeroCrossingTimer);
 								m_NumZeroCrossings = 0;
 								m_zeroCrossingTimer = 0;
 				}
@@ -196,15 +202,5 @@ float Timestretcher::readLoopHead()
 
 void Timestretcher::setDelayTime(int numSamplesDelay)
 { // take current writeheadPosition and last numSamplesDelay setting.
-				// old numSamplesDelay - new NumsamplesDelay += writeHeadPosition
-				//
-				// I DONT AGREE
-				//
-				// move the buffer right of where the buffer was.
-				//
-				// readHeadPosition = writeHeadPosition - numSamplesDelay; TODO: AFTER FIXING THE LOOP
-				//
-				//
-				// readHeadPosition = 0;
 				writeHeadPosition = numSamplesDelay;
 }

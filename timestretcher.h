@@ -16,7 +16,7 @@ class Timestretcher : public Effect {
 				void setThreshold(std::atomic<float> threshold);
 
 				// use the numZeroCrossings to fill buffer
-				void prepare(const float& input);
+				void prepare();
 				void trackBufferSize(const float& input, int& m_zeroCrossingTimer);
 				void fillBuffer(const float& input);
 				float getRmsSignal();
