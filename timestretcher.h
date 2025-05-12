@@ -6,7 +6,7 @@
 class Timestretcher : public Effect {
 		public:
 				Timestretcher();
-				~Timestretcher();
+				~Timestretcher() override;
 
 				// appies the delay effect as a timestretcher
 				void applyEffect(const float& input, float& output) override;

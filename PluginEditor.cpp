@@ -18,7 +18,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 												juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag
 												);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
-				numCrossingsDial.setRange(0, 512, 1);
+				numCrossingsDial.setRange(0, 512, 2);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId,
 												juce::Colour::fromRGBA(255, 255, 255, 200));
 				numCrossingsDial.setDoubleClickReturnValue(true, 256);
@@ -98,13 +98,13 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 				g.drawText(rmsLabel.getText(), 10, 10, getWidth() - 20, 30, juce::Justification::centred);
 
 				//________ LABEL OF ZEROCRSOSING ________
-				/*int currentMin = processorRef.numZeroCrossingsInfo[0];
-				int currentMax = processorRef.numZeroCrossingsInfo[1];
-				zeroCrossingsLabel.setText(juce::String(currentMin) + juce::String("out of") + juce::String(currentMax) + juce::String("zeroCrossings"), juce::dontSendNotification);
+				//int currentMin = processorRef.numZeroCrossingsInfo[0];
+				//int currentMax = processorRef.numZeroCrossingsInfo[1];//FIXME
+				zeroCrossingsLabel.setText(juce::String("currentMin") + juce::String("out of") + juce::String("currentMax") + juce::String("zeroCrossings"), juce::dontSendNotification);
 
 				// Draw the label
 				g.setColour(juce::Colours::white);
-				g.drawText(zeroCrossingsLabel.getText(), 30, 10, getWidth() - 20, 30, juce::Justification::centred);*/
+				g.drawText(zeroCrossingsLabel.getText(), 10, 50, getWidth() - 20, 30, juce::Justification::centred);
 
 }
 
@@ -116,7 +116,7 @@ void AudioPluginAudioProcessorEditor::resized()
 
 				numCrossingsDial.setBounds(leftMargin, topMargin, dialSize, dialSize);
 
-				thresholdSlider.setBounds(leftMargin, topMargin + dialSize, dialSize * 2, dialSize);
+				thresholdSlider.setBounds(leftMargin, topMargin + getHeight() * 0.30, dialSize * 2, dialSize);
 
 				auto buttonWidth
 						= getWidth() * 0.1;
