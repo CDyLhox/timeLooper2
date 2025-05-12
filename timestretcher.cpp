@@ -81,6 +81,7 @@ void Timestretcher::setMaxNumZeroCrossings(std::atomic<int> amountOfZeroCrossing
 				if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 512) {
 								m_maxNumZeroCrossings = amountOfZeroCrossings;
 				} else {
+								m_maxNumZeroCrossings = 256;
 								std::cout << "value is out of range. please select a number between 256" << std::endl;
 				}
 }
