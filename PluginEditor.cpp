@@ -27,6 +27,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				thresholdSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
 				thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 32, 32);
 				thresholdSlider.setRange(0, 1, 0.3);
+				
 				// thresholdSlider.setColour(juce::Slider::ColourIds::)
 				thresholdSlider.setDoubleClickReturnValue(true, 0.3);
 
@@ -67,7 +68,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 				numCrossingsAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
 						processorRef.Params,
-						"umaxNumZeroCrossings",
+						"uMaxNumZeroCrossings",
 						numCrossingsDial);
 
 				thresholdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(

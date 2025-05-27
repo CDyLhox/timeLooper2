@@ -12,8 +12,8 @@ class Timestretcher : public Effect {
 				void applyEffect(const float& input, float& output) override;
 
 				// set the amount of time the inputSig has to cross the 0 before the circbuffer repeats
-				void setMaxNumZeroCrossings(std::atomic<int> timeStretchLength);
-				void setThreshold(std::atomic<float> threshold);
+				void setMaxNumZeroCrossings(float amountOfZeroCrossings);
+				void setThreshold(float threshold);
 
 				// use the numZeroCrossings to fill buffer
 				void prepare();
@@ -28,7 +28,6 @@ class Timestretcher : public Effect {
 				std::vector<int> zeroCrossingsValues;
 				Rms rms { 41500 };
 
-				// Delay circbuffer; // implement parts directly into the timestretcher from circular buffer
 				
 				float m_threshold = 0.3;
 				bool effectTriggered = false;
@@ -39,6 +38,7 @@ class Timestretcher : public Effect {
 				float prevSample = 0;
 				float sample = 0;
 				float m_rmsSignal = 0;
+				uint bufferSize = 44100;
 
 				// ------- CIRCBUFFER STUFF ------
 				void circBuffer(int bufferSize);
@@ -58,7 +58,6 @@ class Timestretcher : public Effect {
 
 
 
-				uint bufferSize = 41000;
 				float currentSample;
 				int numSamplesDelay;
 

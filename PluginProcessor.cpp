@@ -8,8 +8,8 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 							.withInput("Input", juce::AudioChannelSet::stereo(), true)
 							.withOutput("Output", juce::AudioChannelSet::stereo(), true))
 		, Params(*this, nullptr, "Parameters", {
-																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 2.0, 512.0, 256),
-																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uThreshold", 1 }, "Threshold", 0.0, 1.0, 0.3),
+																							 std::make_unique<juce::AudioParameterInt>(juce::ParameterID { "uMaxNumZeroCrossings", 1 }, "MaxNumZeroCrossings", 2, 512, 256),
+																							 std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "uThreshold", 1 }, "Threshold", 0.1, 1.0, 0.3),
 																					 })
 {
 				// Use the parameter ID to return a pointer to our parameter data
@@ -140,7 +140,7 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
 	for (auto& stretcher : timestretchers)
 	{
-		stretcher.setMaxNumZeroCrossings(static_cast<int>(*MaxNumZeroCrossings)); stretcher.setThreshold(static_cast<float>(*threshold));	}	
+		stretcher.setMaxNumZeroCrossings(*MaxNumZeroCrossings); stretcher.setThreshold(*threshold);	}	
 	
 				juce::ignoreUnused(midiMessages);
 

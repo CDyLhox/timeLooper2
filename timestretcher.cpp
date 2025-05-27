@@ -75,20 +75,20 @@ void Timestretcher::prepare()
 				}
 }
 
-void Timestretcher::setMaxNumZeroCrossings(std::atomic<int> amountOfZeroCrossings)
+void Timestretcher::setMaxNumZeroCrossings(float amountOfZeroCrossings)
 { // TODO: safety checks: check if the number is devisable by 2 else correct the number upwards (dc offset)
-				std::cout << "Timestretcher::setAmountZeroCrossings be like\n";
-				if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 512) {
-								m_maxNumZeroCrossings = amountOfZeroCrossings;
+				std::cout << "Timestretcher::setAmountZeroCrossings be like ooh my value iss: " << amountOfZeroCrossings << std::endl;;
+				if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 1024) {
+								m_maxNumZeroCrossings = std::floor(amountOfZeroCrossings);
 				} else {
 								m_maxNumZeroCrossings = 256;
 								std::cout << "value is out of range. please select a number between 256" << std::endl;
 				}
 }
-void Timestretcher::setThreshold(std::atomic<float> threshold)
+void Timestretcher::setThreshold(float threshold)
 {
-				std::cout << "Timestretcher::setThreshold be like\n";
-				if (threshold > 12 || threshold < 0.01) {
+				std::cout << "Timestretcher::setThreshold be like  give better numer thenot bullshit number: " << threshold << std::endl;
+				if (threshold < 12.0 || threshold > 0.01) {
 								m_threshold = threshold;
 				} else {
 								std::cout << "value is out of range. please select a number between 0.01 and 12" << std::endl;
