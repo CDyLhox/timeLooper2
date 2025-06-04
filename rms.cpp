@@ -6,6 +6,7 @@ Rms::Rms(int bufferSize)
 {
 				this->bufferSize = bufferSize;
 				std::cout << "initialising RMS" << std::endl;
+				//TODO: BUFFER MAKEN
 }
 
 Rms::~Rms()

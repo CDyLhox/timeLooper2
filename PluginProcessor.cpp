@@ -15,14 +15,12 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 				// Use the parameter ID to return a pointer to our parameter data
 				MaxNumZeroCrossings = Params.getRawParameterValue("uMaxNumZeroCrossings");
 				threshold = Params.getRawParameterValue("uThreshold");
-				
-
 
 				// for each input channel emplace one filter
-				for (auto i = 0; i < getBusesLayout().getNumChannels(true, 0); ++i) {
-								timestretchers.emplace_back();
-								// Giving the filter some hardcoded start up params
-				}
+				/*	for (auto i = 0; i < getBusesLayout().getNumChannels(true, 0); ++i) {
+									timestretchers.emplace_back();
+									// Giving the filter some hardcoded start up params
+					}*/
 }
 // w
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -98,10 +96,10 @@ void AudioPluginAudioProcessor::changeProgramName(int index, const juce::String&
 void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 				timestretchers.resize(getTotalNumInputChannels());
-				rmsValues.resize(getTotalNumInputChannels(), 0.0f);  // Resize to match the number of input channels
+				rmsValues.resize(getTotalNumInputChannels(), 0.0f); // Resize to match the number of input channels
 
 				for (auto& ts : timestretchers)
-								ts.prepare(); // or whatever your Timestretcher init looks like
+								ts.prepare();
 }
 
 void AudioPluginAudioProcessor::releaseResources()
@@ -138,10 +136,11 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 		juce::MidiBuffer& midiMessages)
 {
 
-	for (auto& stretcher : timestretchers)
-	{
-		stretcher.setMaxNumZeroCrossings(*MaxNumZeroCrossings); stretcher.setThreshold(*threshold);	}	
-	
+				for (auto& stretcher : timestretchers) {
+								stretcher.setMaxNumZeroCrossings(*MaxNumZeroCrossings);
+								stretcher.setThreshold(*threshold);
+				}
+
 				juce::ignoreUnused(midiMessages);
 
 				juce::ScopedNoDenormals noDenormals;
@@ -152,14 +151,14 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 								buffer.clear(i, 0, buffer.getNumSamples());
 
 				// the equivalent of your old audio callback :- )
-				for (int channel = 0; channel < totalNumInputChannels; ++channel) {// Note: writePointer and readPointer point to the same data (in-place processing)
-								auto* writePointer = buffer.getWritePointer(channel); // input
-								auto* readPointer = buffer.getReadPointer(channel);		// output
+				for (int channel = 0; channel < totalNumInputChannels; ++channel) { // Note: writePointer and readPointer point to the same data (in-place processing)
+								auto* writePointer = buffer.getWritePointer(channel);				// input
+								auto* readPointer = buffer.getReadPointer(channel);					// output
 								for (auto sample = 0; sample < buffer.getNumSamples(); ++sample) {
-											timestretchers[channel].processFrame(readPointer[sample],writePointer[sample]);
-								 rmsValues[channel] = timestretchers[channel].getRmsSignal();
-								// numZeroCrossingsInfo[channel] = timestretchers[channel].getNumZeroCrossings(channel);
-
+												timestretchers[channel].processFrame(readPointer[sample], writePointer[sample]);
+												rmsValues[channel] = timestretchers[channel].getRmsSignal();
+												numZeroCrossingsInfo = timestretchers[channel].getNumZeroCrossings();
+												//std::cout << "RMSVALUES IN PROCESSBLOCK" << rmsValues[channel] << " CHANNEL " << channel << std::endl;
 								}
 				}
 }
@@ -181,9 +180,9 @@ void AudioPluginAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 				// You should use this method to store your parameters in the memory block.
 				// You could do that either as raw data, or use the XML or ValueTree classes
 				// as intermediaries to make it easy to save and load complex data.
-				//juce::ignoreUnused(destData);
-				auto state=Params.copyState();
-				std::unique_ptr<juce::XmlElement> xml (state.createXml());	
+				// juce::ignoreUnused(destData);
+				auto state = Params.copyState();
+				std::unique_ptr<juce::XmlElement> xml(state.createXml());
 				copyXmlToBinary(*xml, destData);
 }
 
@@ -191,10 +190,10 @@ void AudioPluginAudioProcessor::setStateInformation(const void* data, int sizeIn
 {
 				// You should use this method to restore your parameters from this memory block,
 				// whose contents will have been created by the getStateInformation() call.
-				//juce::ignoreUnused(data, sizeInBytes);
-				std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data,sizeInBytes));
-				if(xmlState.get() != nullptr){
-								if(xmlState->hasTagName(Params.state.getType())){
+				// juce::ignoreUnused(data, sizeInBytes);
+				std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+				if (xmlState.get() != nullptr) {
+								if (xmlState->hasTagName(Params.state.getType())) {
 												Params.replaceState(juce::ValueTree::fromXml(*xmlState));
 								}
 				}

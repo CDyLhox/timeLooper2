@@ -19,6 +19,7 @@ Timestretcher::~Timestretcher()
 				for (int i = 0; i < 512; i++) {
 								std::cout << "\033[34m" << m_loopBuffer[i] << "\033[0m" << " ";
 				}
+				
 				std::cout << buffer << std::endl;
 
 				std::cout << "readhead pos was: " << readHeadPosition << "\nwritehead pos was: " << writeHeadPosition << std::endl;
@@ -77,20 +78,21 @@ void Timestretcher::prepare()
 
 void Timestretcher::setMaxNumZeroCrossings(float amountOfZeroCrossings)
 { // TODO: safety checks: check if the number is devisable by 2 else correct the number upwards (dc offset)
-				std::cout << "Timestretcher::setAmountZeroCrossings be like ooh my value iss: " << amountOfZeroCrossings << std::endl;;
 				if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 1024) {
 								m_maxNumZeroCrossings = std::floor(amountOfZeroCrossings);
 				} else {
+				std::cout << "Timestretcher::setAmountZeroCrossings be like ooh my value iss: " << amountOfZeroCrossings << std::endl;;
 								m_maxNumZeroCrossings = 256;
 								std::cout << "value is out of range. please select a number between 256" << std::endl;
 				}
 }
 void Timestretcher::setThreshold(float threshold)
 {
-				std::cout << "Timestretcher::setThreshold be like  give better numer thenot bullshit number: " << threshold << std::endl;
 				if (threshold < 12.0 || threshold > 0.01) {
 								m_threshold = threshold;
 				} else {
+								
+				std::cout << "Timestretcher::setThreshold be like  give better numer thenot bullshit number: " << threshold << std::endl;
 								std::cout << "value is out of range. please select a number between 0.01 and 12" << std::endl;
 				}
 }
@@ -107,7 +109,8 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 								m_NumZeroCrossings++;
 				}
 				// check when the zerocrossings has reached its max. update the delaytime 
-				if (m_NumZeroCrossings == m_maxNumZeroCrossings && !effectTriggered) {
+				if (m_NumZeroCrossings == m_maxNumZeroCrossings /*&& !effectTriggered*/) {
+								std::cout << "\033[1m\033[33m" << "TRACKBUFFERSIZE" << "\033[37m" << std::endl;
 								std::cout << "crossed 0 : " << m_NumZeroCrossings << "amount of times" << std::endl;
 								std::cout << m_zeroCrossingTimer << " time between zerocrossings" << std::endl;
 
@@ -123,15 +126,13 @@ void Timestretcher::trackBufferSize(const float& input, int& m_zeroCrossingTimer
 
 float Timestretcher::getRmsSignal()
 {
-				//m_rmsSignal = rmsSignal;
 				return m_rmsSignal;
 }
 
-int Timestretcher::getNumZeroCrossings(float currentSample){
-				zeroCrossingsValues[0] = m_NumZeroCrossings;
-				zeroCrossingsValues[1] = m_maxNumZeroCrossings;
+int Timestretcher::getNumZeroCrossings(){
+				zeroCrossingsValues = m_NumZeroCrossings;
 
-				return zeroCrossingsValues[currentSample];
+				return zeroCrossingsValues;
 
 }
 

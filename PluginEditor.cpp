@@ -6,18 +6,19 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 		: AudioProcessorEditor(&p)
 		, processorRef(p)
 {
+				startTimer(100); 
 				setOpaque(true);
 				juce::ignoreUnused(processorRef);
 				// Make sure that before the constructor has finished, you've set the
 				// editor's size to whatever you need it to be.
-				setSize(1000, 500);
+				setSize(500, 300);
 
 				//________ NUMCROSSING FADER STUFF ________
 				addAndMakeVisible(numCrossingsDial);
 				numCrossingsDial.setSliderStyle(
 												juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag
 												);
-				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 72, 32);
+				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 32, 32);
 				numCrossingsDial.setRange(0, 512, 2);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId,
 												juce::Colour::fromRGBA(255, 255, 255, 200));
@@ -32,18 +33,18 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 				thresholdSlider.setDoubleClickReturnValue(true, 0.3);
 
 				//--------BUTTON STUFF--------
-				addAndMakeVisible(freezeButton);
-				freezeButton.setButtonText("activateLoopButton");
-				freezeButton.setClickingTogglesState(true);
+				addAndMakeVisible(monoButton);
+				monoButton.setButtonText("monoButton");
+				monoButton.setClickingTogglesState(true);
 
 				// buttonColours
-				freezeButton.setColour(juce::TextButton::ColourIds::buttonOnColourId,
+				monoButton.setColour(juce::TextButton::ColourIds::buttonOnColourId,
 												juce::Colours::lightgoldenrodyellow);
-				freezeButton.setColour(juce::TextButton::ColourIds::buttonColourId,
+				monoButton.setColour(juce::TextButton::ColourIds::buttonColourId,
 												juce::Colours::crimson);
-				freezeButton.setColour(juce::TextButton::ColourIds::textColourOnId,
+				monoButton.setColour(juce::TextButton::ColourIds::textColourOnId,
 												juce::Colours::blueviolet);
-				freezeButton.setColour(juce::TextButton::ColourIds::textColourOffId,
+				monoButton.setColour(juce::TextButton::ColourIds::textColourOffId,
 												juce::Colours::black);
 
 				// __________RMS LABEL ____________
@@ -88,24 +89,33 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics& g)
 				g.setColour(juce::Colours::black);
 				g.setFont(15.0f);
 				g.drawFittedText("jue! timestretchlooper {version testvisual 0.6.2}", getLocalBounds(), juce::Justification::centredTop, 1);
-
+				//________ LABELS _________
+				//
+				//__box__
+				g.setColour(juce::Colour::fromRGBA(83, 73, 0, 0.54 * 255));
+				
+				juce::Rectangle<int> area (getWidth()/2,0,getWidth()/2,getHeight());
+				g.fillRect(area);
+				float textXPosition = getWidth()/4;
 				//______ LABEL OF RMS ______
 				float currentRMS = processorRef.rmsValues[0]; // Or iterate over all channels
 				// Update the label text with the current RMS value
 				rmsLabel.setText(juce::String("RMS: ") + juce::String(currentRMS), juce::dontSendNotification);
 
+
 				// Draw the label
-				g.setColour(juce::Colours::white);
-				g.drawText(rmsLabel.getText(), 10, 10, getWidth() - 20, 30, juce::Justification::centred);
+				g.setColour(juce::Colours::blue);
+				g.drawText(rmsLabel.getText(), textXPosition, 10, getWidth() - 20, 30, juce::Justification::centred);
 
 				//________ LABEL OF ZEROCRSOSING ________
-				//int currentMin = processorRef.numZeroCrossingsInfo[0];
-				//int currentMax = processorRef.numZeroCrossingsInfo[1];//FIXME
-				zeroCrossingsLabel.setText(juce::String("currentMin") + juce::String("out of") + juce::String("currentMax") + juce::String("zeroCrossings"), juce::dontSendNotification);
+				int currentMin = processorRef.numZeroCrossingsInfo;
+				zeroCrossingsLabel.setText(juce::String(currentMin) + juce::String(" out of ") + juce::String("512 ") + juce::String("zeroCrossings "), juce::dontSendNotification);
 
 				// Draw the label
-				g.setColour(juce::Colours::white);
-				g.drawText(zeroCrossingsLabel.getText(), 10, 50, getWidth() - 20, 30, juce::Justification::centred);
+				g.setColour(juce::Colours::crimson);
+				g.drawText(zeroCrossingsLabel.getText(), textXPosition, 50, getWidth() - 20, 30, juce::Justification::centred);
+
+				// 
 
 }
 
@@ -117,12 +127,12 @@ void AudioPluginAudioProcessorEditor::resized()
 
 				numCrossingsDial.setBounds(leftMargin, topMargin, dialSize, dialSize);
 
-				thresholdSlider.setBounds(leftMargin, topMargin + getHeight() * 0.30, dialSize * 2, dialSize);
+				thresholdSlider.setBounds(leftMargin, topMargin*4 + getHeight() * 0.30, dialSize , dialSize);
 
 				auto buttonWidth
 						= getWidth() * 0.1;
 				auto buttonHeight = getHeight() * 0.05;
-				freezeButton.setBounds(numCrossingsDial.getX() + numCrossingsDial.getWidth(), topMargin, buttonWidth, buttonHeight);
+				monoButton.setBounds(leftMargin, topMargin, buttonWidth, buttonHeight);
 				// This is generally where you'll want to lay out the positions of any
 				// subcomponents in your editor..
 }
