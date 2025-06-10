@@ -6,23 +6,38 @@ Rms::Rms(int bufferSize)
 {
 				this->bufferSize = bufferSize;
 				std::cout << "initialising RMS" << std::endl;
-				//TODO: BUFFER MAKEN
+				rmsBuffer = new float[bufferSize];
+				for(int i = 0; i<bufferSize; i++){
+				rmsBuffer[i] = 0;
+				}
 }
 
 Rms::~Rms()
 {
+				delete[] rmsBuffer;
+				rmsBuffer = nullptr;
 }
 
 float Rms::trackSignal(float incomingSignal)
 {
-				//do rms without keeping a real buffer. just track the buffersum and the index of the sample 
-				bufferPosition++;
+    // Square the new signal
+    float squaredSignal = incomingSignal * incomingSignal;
 
-				bufferSum += incomingSignal * incomingSignal;
-				RMSSignal = std::sqrt(bufferSum / static_cast<float>(bufferPosition));
+    // Subtract the old value from the sum
+    bufferSum -= rmsBuffer[bufferPosition];
 
-				if(bufferPosition > bufferSize){resetRmsSize();}
-				return RMSSignal;
+    // Store the new squared value in the buffer
+    rmsBuffer[bufferPosition] = squaredSignal;
+
+    // Add the new squared value to the sum
+    bufferSum += squaredSignal;
+
+    // Move buffer position circularly
+    bufferPosition = (bufferPosition + 1) % bufferSize;
+
+    // Calculate and return the RMS
+    RMSSignal = std::sqrt(bufferSum / bufferSize);
+    return RMSSignal;
 }
 
 float Rms::resetRmsSize()

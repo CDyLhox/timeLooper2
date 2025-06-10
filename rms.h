@@ -12,7 +12,9 @@ class Rms {
 				float resetRmsSize();
 
 		private:
-				int bufferSize = 4000;
+				float* rmsBuffer;
+
+				int bufferSize = 41000;
 				int bufferPosition = 0;
 
 				float* buffer;

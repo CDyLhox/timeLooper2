@@ -25,6 +25,7 @@ class Timestretcher : public Effect {
 
 		protected:
 		private:
+                bool reverseBuffer = false; //TODO: interesting parameter
 				int zeroCrossingsValues;
 				Rms rms { 41500 };
 
