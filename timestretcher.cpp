@@ -38,7 +38,8 @@ void Timestretcher::applyEffect(const float& input, float& output)
     writeHead(input);
     incrementWriteHead();
 
-    m_rmsSignal = rms.trackSignal(input);
+    m_rmsSignal = m_levelTracker.trackSignal(input);
+
     output = readLoopHead();
     incrementLoopReadHead();
 
@@ -46,28 +47,42 @@ void Timestretcher::applyEffect(const float& input, float& output)
 }
 void Timestretcher::prepare()
 {
-    if (m_rmsSignal > m_threshold && effectTriggered == false) { // FIXME 0.3 is sensitivity of the effect
+    if (m_rmsSignal > m_threshold && effectTriggered == false) {
         effectTriggered = true;
-        std::cout << "timestretcher prepare" << std::endl;
         m_writeLoopHeadPosition = 0;
 
-        if (writeHeadPosition - m_loopSize < 0) {
+        // Recalculate loop size based on most recent zero-crossings
+        if (m_NumZeroCrossings > 0)
+            m_loopSize = (m_zeroCrossingTimer * m_maxNumZeroCrossings) / m_NumZeroCrossings;
+
+        // Fallback: if calculation failed, use full buffer
+        if (m_loopSize <= 0 || m_loopSize > bufferSize)
+            m_loopSize = bufferSize;
+
+        // Align read head to a valid section of the buffer
+        if (writeHeadPosition - m_loopSize < 0)
             readHeadPosition = writeHeadPosition - m_loopSize + bufferSize;
-        } else {
+        else
             readHeadPosition = writeHeadPosition - m_loopSize;
-        }
+
         wrapHeads(readHeadPosition);
 
-        // Note: copy the loop from the big buffer to the loopBuffer
-        for (int i = 0; i < bufferSize; i++) {
-            writeLoopHead(readHead());
-            incrementLoopWriteHead();
+        // Clear old loop contents before writing
+        for (int i = 0; i < bufferSize; ++i)
+            m_loopBuffer[i] = 0.0f;
 
+        // Copy *exactly* m_loopSize samples into loop buffer
+        for (int i = 0; i < m_loopSize; ++i) {
+            float sample = readHead(); // circular buffer read
+            writeLoopHead(sample);     // write into loop buffer
+            incrementLoopWriteHead();
             incrementReadHead();
         }
 
-        readHeadPosition = 0;
-        rms.resetRmsSize();
+        readHeadPosition = 0; // reset for loop playback
+
+        // Reset detection state
+        m_levelTracker.reset();
         m_rmsSignal = 0;
         return;
     }
@@ -77,19 +92,22 @@ void Timestretcher::prepare()
 }
 
 void Timestretcher::setMaxNumZeroCrossings(float amountOfZeroCrossings)
-{ // TODO: safety checks: check if the number is devisable by 2 else correct the number upwards (dc offset)
-    if (amountOfZeroCrossings > 2 || amountOfZeroCrossings < 1024) {
-        m_maxNumZeroCrossings = std::floor(amountOfZeroCrossings);
-    } else {
-        std::cout << "Timestretcher::setAmountZeroCrossings be like ooh my value iss: " << amountOfZeroCrossings << std::endl;
-        ;
-        m_maxNumZeroCrossings = 256;
-        std::cout << "value is out of range. please select a number between 256" << std::endl;
+{
+    amountOfZeroCrossings = std::clamp(amountOfZeroCrossings, 2.0f, 1024.0f);
+    int newMax = std::floor(amountOfZeroCrossings);
+
+    if (newMax != m_maxNumZeroCrossings) {
+        m_maxNumZeroCrossings = newMax;
+        if (effectTriggered) {
+            // Force rebuild of loop with new size
+            effectTriggered = false;
+        }
     }
 }
+
 void Timestretcher::setThreshold(float threshold)
 {
-    if (threshold < 12.0 || threshold > 0.01) {
+    if (threshold < 12.0 && threshold > 0.01) {
         m_threshold = threshold;
     } else {
 

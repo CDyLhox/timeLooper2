@@ -2,6 +2,7 @@
 
 #include "effect.h"
 #include "rms.h"
+#include "leveler.h"
 
 class Timestretcher : public Effect {
 		public:
@@ -27,7 +28,7 @@ class Timestretcher : public Effect {
 		private:
                 bool reverseBuffer = false; //TODO: interesting parameter
 				int zeroCrossingsValues;
-				Rms rms { 41500 };
+                LevelTracker m_levelTracker{512};
 
 				
 				float m_threshold = 0.3;

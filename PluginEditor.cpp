@@ -19,7 +19,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 												juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag
 												);
 				numCrossingsDial.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 32, 32);
-				numCrossingsDial.setRange(0, 512, 2);
+				numCrossingsDial.setRange(2, 512, 2);
 				numCrossingsDial.setColour(juce::Slider::ColourIds::rotarySliderFillColourId,
 												juce::Colour::fromRGBA(255, 255, 255, 200));
 				numCrossingsDial.setDoubleClickReturnValue(true, 256);
