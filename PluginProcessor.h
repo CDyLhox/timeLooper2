@@ -41,8 +41,8 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor {
 				//==============================================================================
 				void getStateInformation(juce::MemoryBlock& destData) override;
 				void setStateInformation(const void* data, int sizeInBytes) override;
-				
-
+				//set timestretcher leveling mode
+                void setLevelMode(LevelMode mode);
 				//TODO:: MAAK GETTERS VOOR EN MAAK PRIVATE
 				std::vector<float> rmsValues;  // Store RMS values for each channel
 				int numZeroCrossingsInfo;

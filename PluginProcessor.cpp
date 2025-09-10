@@ -199,6 +199,13 @@ void AudioPluginAudioProcessor::setStateInformation(const void* data, int sizeIn
 								}
 				}
 }
+// timestretcher leveling mode
+void AudioPluginAudioProcessor::setLevelMode(LevelMode mode)
+{
+    for (auto& ts : timestretchers)
+        ts.m_levelTracker.setMode(mode);
+}
+
 
 //==============================================================================
 // This creates new instances of the plugin..

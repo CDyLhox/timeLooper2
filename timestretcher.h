@@ -24,11 +24,11 @@ class Timestretcher : public Effect {
 				int getNumZeroCrossings();
 
 
+                LevelTracker m_levelTracker{512}; // TODO: MAke PRIVATE
 		protected:
 		private:
                 bool reverseBuffer = false; //TODO: interesting parameter
 				int zeroCrossingsValues;
-                LevelTracker m_levelTracker{512};
 
 				
 				float m_threshold = 0.3;
